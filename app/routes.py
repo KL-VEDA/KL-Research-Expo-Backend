@@ -30,10 +30,13 @@ def register():
         return jsonify({"error": "Team name and members are required"}), 400
 
     try:
-        # Create team
+        # Create team without team_code initially
         team = Team(team_name=team_name, paper_drive_link=paper_drive_link)
         db.session.add(team)
         db.session.flush()  # Get team.team_id before committing
+
+        # Generate the team_code in the format KL-RE25-xxxx
+        team.team_code = f"KL-RE25-{team.team_id:04d}"
 
         # Validate only one team leader
         leaders = [m for m in members_data if m.get("is_team_leader")]
@@ -55,7 +58,8 @@ def register():
 
         return jsonify({
             "message": "Team registered successfully",
-            "team_id": team.team_id
+            "team_id": team.team_id,
+            "team_code": team.team_code
         }), 201
 
     except IntegrityError as e:

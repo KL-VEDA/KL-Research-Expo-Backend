@@ -26,6 +26,7 @@ class Team(db.Model):
 
     team_id = db.Column(db.Integer, primary_key=True)
     team_name = db.Column(db.String(255), unique=True, nullable=False)
+    team_code = db.Column(db.String(64), unique=True)  # New column added
     paper_drive_link = db.Column(db.Text, nullable=True)
 
     # Relationships
