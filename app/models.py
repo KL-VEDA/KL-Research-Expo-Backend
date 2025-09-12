@@ -26,8 +26,10 @@ class Team(db.Model):
 
     team_id = db.Column(db.Integer, primary_key=True)
     team_name = db.Column(db.String(255), unique=True, nullable=False)
-    team_code = db.Column(db.String(64), unique=True)  # New column added
+    team_code = db.Column(db.String(64), unique=True)
     paper_drive_link = db.Column(db.Text, nullable=True)
+    
+    password = db.Column(db.Text, nullable=False)  # <-- New password column
 
     # Relationships
     members = db.relationship('Member', backref='team', cascade='all, delete-orphan')
@@ -41,7 +43,15 @@ class Member(db.Model):
 
     member_id = db.Column(db.Integer, primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('teams.team_id'), nullable=False)
+    
     name = db.Column(db.String(255), nullable=False)
     contact = db.Column(db.String(20))
     email = db.Column(db.String(255), unique=True, nullable=False)
+    
     is_team_leader = db.Column(db.Boolean, default=False)
+
+    # 🔍 Updated education details
+    degree_program = db.Column(db.String(100), nullable=True)      # e.g., B.Tech, M.Tech, PhD, Faculty
+    year_or_status = db.Column(db.String(100), nullable=True)      # e.g., 3rd Year, Completed, N/A
+    institution = db.Column(db.String(255), nullable=True)         # e.g., KL University
+    role = db.Column(db.String(100), nullable=True)                # e.g., Student, Faculty, Professor
